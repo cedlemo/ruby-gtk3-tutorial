@@ -14,3 +14,8 @@ https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.5
 https://developer.gnome.org/gtk3/stable/ch01s02.html
 
 *    example-2.rb
+
+## Building user interfaces
+https://developer.gnome.org/gtk3/stable/ch01s03.html
+
+*    example-4.rb
