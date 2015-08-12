@@ -19,3 +19,8 @@ https://developer.gnome.org/gtk3/stable/ch01s02.html
 https://developer.gnome.org/gtk3/stable/ch01s03.html
 
 *    example-4.rb
+
+## Building applications
+
+### A trivial application
+*    exampleapp1.rb
