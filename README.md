@@ -23,4 +23,11 @@ https://developer.gnome.org/gtk3/stable/ch01s03.html
 ## Building applications
 
 ### A trivial application
+https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.5
+
 *    exampleapp1.rb
+
+### Populating the window
+https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.6
+
+*    exampleapp2.rb
