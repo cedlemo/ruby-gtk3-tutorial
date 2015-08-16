@@ -20,12 +20,16 @@ resource = Gio::Resource.load(gresource_bin)
 Gio::Resources.register(resource)
 
 class ExampleAppWindow < Gtk::ApplicationWindow
+  type_register
   class << self
     def init
-      get_window.set_template(:resource => "/org/gtk/exampleapp/window.ui")
+      set_template(:resource => "/org/gtk/exampleapp/window.ui")
     end
   end
-  type_register
+
+  def initialize(application)
+    super(:application => application)
+  end
 
   def open(file)
     
@@ -40,6 +44,7 @@ class ExampleApp < Gtk::Application
       window = ExampleAppWindow.new(application)
       window.present
     end
+
     signal_connect "open" do |application, files, hin|
       windows = application.get_windows
       win = nil
@@ -53,6 +58,7 @@ class ExampleApp < Gtk::Application
         
       win.present
     end
+
   end
 end
 
