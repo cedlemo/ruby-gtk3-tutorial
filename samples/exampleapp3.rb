@@ -20,12 +20,13 @@ resource = Gio::Resource.load(gresource_bin)
 Gio::Resources.register(resource)
 
 class ExampleAppWindow < Gtk::ApplicationWindow
+  # https://github.com/ruby-gnome2/ruby-gnome2/pull/445
+  # https://github.com/ruby-gnome2/ruby-gnome2/issues/503
   type_register
   class << self
     def init
       set_template(:resource => "/org/gtk/exampleapp/window.ui")
       bind_template_child("stack")
-# https://github.com/ruby-gnome2/ruby-gnome2/pull/445
     end
   end
 
