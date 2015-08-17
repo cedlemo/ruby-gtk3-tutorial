@@ -31,3 +31,8 @@ https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.5
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.6
 
 *    exampleapp2.rb
+
+### Opening files
+https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.7
+
+*    exampleapp3.rb
