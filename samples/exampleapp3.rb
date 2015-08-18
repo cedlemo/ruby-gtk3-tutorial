@@ -47,7 +47,6 @@ class ExampleAppWindow < Gtk::ApplicationWindow
     scrolled.add(view)
     stack.add_titled(scrolled, basename, basename)
     stream = file.read
-    puts basename
     view.buffer.text = stream.read
   end
 end
@@ -80,4 +79,4 @@ end
 
 app = ExampleApp.new
 
-puts app.run(ARGV)
+puts app.run([$0] + ARGV)
