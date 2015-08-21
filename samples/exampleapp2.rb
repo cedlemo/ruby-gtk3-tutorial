@@ -3,14 +3,15 @@ require "gtk3"
 require "fileutils"
 
 current_path = File.expand_path(File.dirname(__FILE__))
-gresource_bin = "#{current_path}/exampleapp.gresource"
-gresource_xml = "#{current_path}/exampleapp.gresource.xml"
+file_pattern = File.basename(__FILE__).gsub(".rb","")
+data_path = "#{current_path}/data/#{file_pattern}"
+gresource_bin = "#{data_path}/exampleapp.gresource"
+gresource_xml = "#{data_path}/exampleapp.gresource.xml"
 
-Dir.chdir(File.dirname(gresource_xml)) do
-  system("glib-compile-resources",
-         "--target", gresource_bin,
-         File.basename(gresource_xml))
-end
+system("glib-compile-resources",
+       "--target", gresource_bin,
+       "--sourcedir", File.dirname(gresource_xml),
+       gresource_xml)
 
 at_exit do
   FileUtils.rm_f(gresource_bin)
