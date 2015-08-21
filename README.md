@@ -36,3 +36,8 @@ https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.6
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.7
 
 *    exampleapp3.rb
+
+### An application Menu
+https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.8
+
+*    exampleapp4.rb

@@ -64,6 +64,12 @@ class ExampleApp < Gtk::Application
       application.add_action(action)
       application.set_accels_for_action("app.quit", quit_accels)
 
+      action = Gio::SimpleAction.new("preferences")
+      action.signal_connect("activate") do |_action, parameter|
+
+      end
+      application.add_action(action)
+
       builder = Gtk::Builder.new(:resource => "/org/gtk/exampleapp/app-menu.ui")
       app_menu = builder.get_object("appmenu")
       application.set_app_menu(app_menu)
