@@ -56,15 +56,14 @@ class ExampleApp < Gtk::Application
     super("org.gtk.exampleapp", :handles_open)
 
     signal_connect "startup" do |application|
-      quit_accels = ["<Ctrl>Q","<Ctrl>O"]
-      act_en = Gtk::ActionEntry.new
-      act_en.name = "quit"
-      act_en.callback = proc do |a1, a2|
-        puts "toto"
+      quit_accels = ["<Ctrl>Q"]
+      action = Gio::SimpleAction.new("quit")
+      action.signal_connect("activate") do |_action, parameter|
+        application.quit
       end
-      application.add_action_entries([act_en], 1)
+      application.add_action(action)
       application.set_accels_for_action("app.quit", quit_accels)
-    
+
       builder = Gtk::Builder.new(:resource => "/org/gtk/exampleapp/app-menu.ui")
       app_menu = builder.get_object("appmenu")
       application.set_app_menu(app_menu)
@@ -85,7 +84,7 @@ class ExampleApp < Gtk::Application
       end
 
       files.each { |file| win.open(file) }
-        
+
       win.present
     end
 
