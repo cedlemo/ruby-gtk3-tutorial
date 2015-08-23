@@ -49,7 +49,7 @@ class ExampleAppWindow < Gtk::ApplicationWindow
     # check ruby-gnome Gio::Settings.new or Gio::Schemas ??
     settings = Gio::Settings.new("org.gtk.exampleapp")
     settings.bind("transition",
-                  application.stack,
+                  stack,
                   "transition-type",
                   Gio::SettingsBindFlags::DEFAULT)
   end
