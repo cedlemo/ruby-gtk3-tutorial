@@ -46,3 +46,4 @@ https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.8
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.9
 
 *    exampleapp5.rb
+*    exampleapp6.rb
