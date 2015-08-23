@@ -21,7 +21,7 @@ system("glib-compile-schemas", DATA_PATH)
 
 
 at_exit do
-  FileUtils.rm_f([gresource_bin])
+  FileUtils.rm_f([gresource_bin, gschema_bin])
 end
 
 resource = Gio::Resource.load(gresource_bin)
