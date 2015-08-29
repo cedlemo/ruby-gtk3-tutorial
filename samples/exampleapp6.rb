@@ -27,9 +27,7 @@ end
 resource = Gio::Resource.load(gresource_bin)
 Gio::Resources.register(resource)
 
-Gio::SettingsSchemaSource.new(DATA_PATH,
-                              Gio::SettingsSchemaSource.default,
-                              false)
+ENV["GSETTINGS_SCHEMA_DIR"] = DATA_PATH
 
 class ExampleAppPrefs < Gtk::Dialog
   type_register
