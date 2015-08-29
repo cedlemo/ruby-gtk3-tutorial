@@ -44,7 +44,6 @@ class ExampleAppPrefs < Gtk::Dialog
     parent = args[:transient_for]
     bar = args[:use_header_bar]
     super(:transient_for => parent, :use_header_bar => 1)
-    init_template
     settings = Gio::Settings.new("org.gtk.exampleapp")
     settings.bind("font",
                   font,
