@@ -1,6 +1,6 @@
 # Getting started with GTK+ with the ruby-gnome2 Gtk3 module.
 
-This is a ruby adaptation of the official tutorial for the C language at https://developer.gnome.org/gtk3/stable/gtk-getting-started.html.
+This is a ruby adaptation of the official tutorial for the C language that you can find at https://developer.gnome.org/gtk3/stable/gtk-getting-started.html.
 
 GTK+ is a widget toolkit. Each user interface created by GTK+ consists of widgets. The Gtk3 module of the ruby-gnome2 project is an implementation of the ruby bindings for GTK+.
 
@@ -64,7 +64,52 @@ A window title is set using `Gtk::Window#set_title`. This function takes a strin
 
 When you exit the window, by for example pressing the X, the `Gtk::Application#run` in the main loop returns with a number which is the exit status.
 
+While the program is running, GTK+ is receiving *events*. These are typically input events caused by the user interacting with your program, but also things like messages from the window manager or other applications. GTK+ processes these and as a result, signals may be emitted on your widgets. Connecting handlers for these signals is how you normally make your program do something in response to user input.
+The following example is slightly more complex, and tries to showcase some of the capabilities of GTK+.
+
+In the long tradition of programming languages and libraries, it is called *Hello, World*.
 *    example-1.rb
+```ruby
+require "gtk3"
+app = Gtk::Application.new("org.gtk.example", :flags_none)
+
+app.signal_connect "activate" do |application|
+  window = Gtk::ApplicationWindow.new(application)
+  window.set_title("Window")
+  window.set_default_size(200, 200)
+
+  button_box = Gtk::ButtonBox.new(:horizontal)
+  window.add(button_box)
+
+  button = Gtk::Button.new(label: "Hello World")
+  button.signal_connect "clicked" do |widget|
+    puts "Hello World"
+    window.destroy
+  end
+
+  button_box.add(button)
+
+  window.show_all
+end
+
+# Gtk::Application#run need C style argv ([prog, arg1, arg2, ...,argn]).
+# The ARGV ruby variable only contains the arguments ([arg1, arg2, ...,argb])
+# and not the program name. We have to add it explicitly.
+
+puts app.run([$0] + ARGV)
+```
+As seen above, example-1.rb builds further upon example-0.rb by adding a button to our window, with the label "Hello World". Two new variables are created to accomplish this, button and button_box.
+
+The button_box variable stores a `Gtk::ButtonBox` object, which is GTK+'s way of controlling the size and layout of buttons. The `Gtk::ButtonBox` is created with the method `Gtk::ButtonBox#new` which takes a `Gtk::Orientation `constant as parameter or the related symbols (`:vertical` or `:horizontal`).
+
+The buttons which this box will contain can either be stored horizontally or vertically but this does not matter in this particular case as we are dealing with only one button. After initializing button_box with horizontal orientation, the code adds the button_box widget to the window widget using `Gtk::ButtonBox#add`.
+
+Next the button variable is initialized in similar manner. The method `Gtk::Button#new` is called which returns a GtkButton to be stored inside button. A label is set using a ruby hash as argument :`:label => "Hello World"`.
+
+Afterwards button is added to our button_box. Using the method "Gtk::Button#signal_connect" we add instructions, so that when the button is clicked, a message will be displayed in the terminal if the GTK application was started from one.
+
+After that, `Gtk::Window#destroy` is called. This method is herited from `Gtk::Widget`. This has the effect that when the button is clicked, the whole GTK window is destroyed. More information about creating buttons can be found [here](https://wiki.gnome.org/HowDoI/Buttons).
+The rest of the code in example-1.rb is identical to example-0.rb. Next section will elaborate further on how to add several GtkWidgets to your GTK application.
 
 ## Packing
 https://developer.gnome.org/gtk3/stable/ch01s02.html
@@ -93,13 +138,16 @@ https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.7
 
 *    exampleapp3.rb
 
-### An application Menu
+### An application menu
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.8
 
 *    exampleapp4.rb
 
-### A preference dialog
+### A preferences dialog
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.9
 
 *    exampleapp5.rb
 *    exampleapp6.rb
+
+### Adding a search bar
+https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.10
