@@ -254,10 +254,11 @@ Here is the "builder.ui" file that describes the interface:
 </interface>
 ```
 
-The usage of the Gtk::Builder is really easy, we just create a Gtk::Builder instance from the
-file "builder.ui" with `Gtk::Builder.new(:file => builder_file)`. Then you can access every widget or part of the interface thanks to its name: `window = builder.get_object("window")`. Note that GtkBuilder can also be used to construct objects that are not widgets, such as tree models, adjustments, etc.
+The usage of the `Gtk::Builder` is really easy, we just create an instance from the
+file "builder.ui" with `Gtk::Builder.new(:file => builder_file)`. Then you can access every widget or part of the interface thanks to its name: `window = builder.get_object("window")`. Note that `Gtk::Builder` can also be used to construct objects that are not widgets, such as tree models, adjustments, etc.
 
-The xml definition of the interface can be loaded from a file, a string or a path in a gresource binary. More informations related to this xml definition can be found [here](https://developer.gnome.org/gtk3/stable/GtkBuilder.html#BUILDER-UI). Those files are generally built with [glade](https://glade.gnome.org/). 
+The XML definition of the interface can be loaded from a file, a string or a path in a gresource binary. More informations related to this XML definition can be found [here](https://developer.gnome.org/gtk3/stable/GtkBuilder.html#BUILDER-UI). Those files are generally built with [glade](https://glade.gnome.org/). 
+
 
 ## Building applications
 
