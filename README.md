@@ -114,12 +114,150 @@ The rest of the code in example-1.rb is identical to example-0.rb. Next section 
 ## Packing
 https://developer.gnome.org/gtk3/stable/ch01s02.html
 
+When creating an application, you'll want to put more than one widget inside a window. When you want to put more than one widget into a window, it it becomes important to control how each widget is positioned and sized. This is where packing comes in.
+
+GTK+ comes with a large variety of layout containers whose purpose it is to control the layout of the child widgets that are added to them. See [Layout Containers](https://developer.gnome.org/gtk3/stable/LayoutContainers.html) for an overview.
+
+The following example shows how the `Gtk::Grid` container lets you arrange several buttons:
 *    example-2.rb
+
+```ruby
+require "gtk3"
+
+app = Gtk::Application.new("org.gtk.example", :flags_none)
+
+app.signal_connect "activate" do |application|
+  # create a new window, and set its title
+  window = Gtk::ApplicationWindow.new(application)
+  window.set_title("Window")
+  window.set_border_width(10)
+
+  # Here we construct the container that is going pack our buttons 
+  grid = Gtk::Grid.new
+
+  # Pack the container in the window
+  window.add(grid)
+
+  button = Gtk::Button.new(:label => "Button 1")
+  button.signal_connect("clicked") { puts "Hello World" }
+  # Place the first button in the grid cell (0, 0), and make it fill
+  # just 1 cell horizontally and vertically (ie no spanning)
+  grid.attach(button, 0, 0, 1, 1)
+
+  button = Gtk::Button.new(:label => "Button 2")
+  button.signal_connect("clicked") { puts "Hello World" }
+  # Place the second button in the grid cell (1, 0), and make it fill
+  # just 1 cell horizontally and vertically (ie no spanning)
+  grid.attach(button, 1, 0, 1, 1)
+
+  button = Gtk::Button.new(:label => "Quit")
+  button.signal_connect("clicked") { window.destroy }
+  # Place the Quit button in the grid cell (0, 1), and make it
+  # span 2 columns.
+  grid.attach(button, 0, 1, 2, 1)
+
+  # Now that we are done packing our widgets, we show them all
+  # in one go, by calling Gtk::Widget#show_all on the window.
+  # This call recursively calls Gtk::Widget#show on all widgets
+  # that are contained in the window, directly or indirectly
+  window.show_all
+end
+
+# Gtk::Application#run need C style argv ([prog, arg1, arg2, ...,argn]).
+# The ARGV ruby variable only contains the arguments ([arg1, arg2, ...,argb])
+# and not the program name. We have to add it explicitly.
+
+status = app.run([$0] + ARGV)
+
+puts status
+```
 
 ## Building user interfaces
 https://developer.gnome.org/gtk3/stable/ch01s03.html
 
-*    example-4.rb
+When construcing a more complicated user interface, with dozens or hundreds of widgets, doing all the setup work in code is cumbersome, and making changes becomes next to impossible.
+Thankfully, GTK+ supports the separation of user interface layout from your business logic, by using UI descriptions in an XML format that can be parsed by the GtkBuilder class.
+
+*    example-4.rb : Packing buttons with GtkBuilder
+
+```ruby
+require "gtk3"
+
+builder_file = "#{File.expand_path(File.dirname(__FILE__))}/builder.ui"
+
+# Construct a Gtk::Builder instance and load our UI description
+builder = Gtk::Builder.new(:file => builder_file)
+
+# Connect signal handlers to the constructed widgets
+window = builder.get_object("window")
+window.signal_connect("destroy") { Gtk.main_quit }
+
+button = builder.get_object("button1")
+button.signal_connect("clicked") { puts "Hello World" }
+
+button = builder.get_object("button2")
+button.signal_connect("clicked") { puts "Hello World" }
+
+button = builder.get_object("quit")
+button.signal_connect("clicked") { Gtk.main_quit }
+
+Gtk.main
+```
+
+Here is the "builder.ui" file that describes the interface:
+
+```xml
+<interface>
+  <object id="window" class="GtkWindow">
+    <property name="visible">True</property>
+    <property name="title">Grid</property>
+    <property name="border-width">10</property>
+    <child>
+      <object id="grid" class="GtkGrid">
+        <property name="visible">True</property>
+        <child>
+          <object id="button1" class="GtkButton">
+            <property name="visible">True</property>
+            <property name="label">Button 1</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object id="button2" class="GtkButton">
+            <property name="visible">True</property>
+            <property name="label">Button 2</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object id="quit" class="GtkButton">
+            <property name="visible">True</property>
+            <property name="label">Quit</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+      </packing>
+    </child>
+  </object>
+</interface>
+```
+
+The usage of the Gtk::Builder is really easy, we just create a Gtk::Builder instance from the
+file "builder.ui" with `Gtk::Builder.new(:file => builder_file)`. Then you can access every widget or part of the interface thanks to its name: `window = builder.get_object("window")`. Note that GtkBuilder can also be used to construct objects that are not widgets, such as tree models, adjustments, etc.
+
+The xml definition of the interface can be loaded from a file, a string or a path in a gresource binary. More informations related to this xml definition can be found [here](https://developer.gnome.org/gtk3/stable/GtkBuilder.html#BUILDER-UI). Those files are generally built with [glade](https://glade.gnome.org/). 
 
 ## Building applications
 
