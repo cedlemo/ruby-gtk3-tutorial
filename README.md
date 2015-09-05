@@ -345,3 +345,5 @@ https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.9
 
 ### Adding a search bar
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.10
+
+*    exampleapp7.rb
