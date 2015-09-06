@@ -325,6 +325,70 @@ This does not look very impressive yet, but our application is already presentin
 ### Populating the window
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.6
 
+In this step, we use a [`Gtk::Builder`](https://developer.gnome.org/gtk3/stable/GtkBuilder.html) template to associate a [`Gtk::Builder`](https://developer.gnome.org/gtk3/stable/GtkBuilder.html) ui file with our application window class.
+Our simple ui file puts a [`GtkHeaderBar`](https://developer.gnome.org/gtk3/stable/GtkHeaderBar.html) on top of a [`GtkStack`](https://developer.gnome.org/gtk3/stable/GtkStack.html) widget. The header bar contains a [`GtkStackSwitcher`](https://developer.gnome.org/gtk3/stable/GtkStackSwitcher.html), which is a standalone widget to show a row of 'tabs' for the pages of a [`GtkStack`](https://developer.gnome.org/gtk3/stable/GtkStack.html) .
+
+Here is the "window.ui" file that contains the template of the window:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="ExampleAppWindow" parent="GtkApplicationWindow">
+    <property name="title" translatable="yes">Example Application</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <child>
+      <object class="GtkBox" id="content_box">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkHeaderBar" id="header">
+            <property name="visible">True</property>
+            <child type="title">
+              <object class="GtkStackSwitcher" id="tabs">
+                <property name="visible">True</property>
+                <property name="margin">6</property>
+                <property name="stack">stack</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
+```
+Unlike regular interface descriptions, in template XML descriptions, a`<template>` tag is expected as a direct child of the toplevel `<interface>` tag. Yhe `<template>` tag must specify the "*class*" attribute which must be the class name of the widget. Optionally, the "*parent*" attribute may be specified to indicate the direct parent class (superclass).
+
+More informations can be find in the part [building composite widgets from template XML](https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget.description) of the `Gtk::Widget` documentation. 
+
+* exampleapp2.rb : link a template to a custom class widget.
+
+```ruby
+class ExampleAppWindow < Gtk::ApplicationWindow
+  type_register
+  class << self
+    def init
+      set_template(:resource => "/org/gtk/exampleapp/window.ui")
+    end
+  end
+
+  def initialize(application)
+    super(:application => application)
+  end
+
+  def open(file)
+    
+  end
+end
+```
+
 *    exampleapp2.rb
 
 ### Opening files
