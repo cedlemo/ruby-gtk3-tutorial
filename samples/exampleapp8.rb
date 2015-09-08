@@ -36,7 +36,6 @@ def update_words(win)
   buffer = view.buffer
   iter = buffer.start_iter
   strings = []
-  #deal with goto
   done = false
   while (!iter.end?)
     while(!iter.starts_word)
@@ -109,8 +108,7 @@ class ExampleAppWindow < Gtk::ApplicationWindow
 
       private
 
-      def search_text_changed(*args)
-        search_entry = args[0]
+      def search_text_changed(search_entry)
         text = search_entry.text
         return if text.empty?
 
@@ -124,8 +122,7 @@ class ExampleAppWindow < Gtk::ApplicationWindow
         view.scroll_to_iter(range[0], 0.0, false, 0.0, 0.0)
       end
     
-      def visible_child_changed(*args)
-        stack = args[0]
+      def visible_child_changed(stack, params)
         return if stack.in_destruction?
         win = stack.toplevel
         win.searchbar.set_search_mode(false)
@@ -152,7 +149,7 @@ class ExampleAppWindow < Gtk::ApplicationWindow
      puts "sidebar class #{sidebar.class}"
      puts "gparamspec #{gparamspec.class}"
      puts "application #{application.class}"
-      update_words(self)
+      update_words(application)
     end
     builder = Gtk::Builder.new(:resource => "/org/gtk/exampleapp/gears-menu.ui")
     menu = builder.get_object("menu")
