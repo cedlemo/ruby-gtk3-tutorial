@@ -388,6 +388,13 @@ class ExampleAppWindow < Gtk::ApplicationWindow
   end
 end
 ```
+* type_register :
+  we register this class as a new GType (glib2/ext/glib2/rbgobj_object.c and https://developer.gnome.org/gobject/stable/chapter-gtype.html).
+  https://blogs.gnome.org/desrt/2012/02/26/a-gentle-introduction-to-gobject-construction/
+
+  # https://github.com/ruby-gnome2/ruby-gnome2/pull/445
+  # https://github.com/ruby-gnome2/ruby-gnome2/issues/503
+  when type register is used, super is equivalent to `GLib::Object#initialize`
 
 *    exampleapp2.rb
 
