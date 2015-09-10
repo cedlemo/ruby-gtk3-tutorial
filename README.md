@@ -326,7 +326,7 @@ This does not look very impressive yet, but our application is already presentin
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.6
 
 In this step, we use a [`Gtk::Builder`](https://developer.gnome.org/gtk3/stable/GtkBuilder.html) template to associate a [`Gtk::Builder`](https://developer.gnome.org/gtk3/stable/GtkBuilder.html) ui file with our application window class.
-Our simple ui file puts a [`GtkHeaderBar`](https://developer.gnome.org/gtk3/stable/GtkHeaderBar.html) on top of a [`GtkStack`](https://developer.gnome.org/gtk3/stable/GtkStack.html) widget. The header bar contains a [`GtkStackSwitcher`](https://developer.gnome.org/gtk3/stable/GtkStackSwitcher.html), which is a standalone widget to show a row of 'tabs' for the pages of a [`GtkStack`](https://developer.gnome.org/gtk3/stable/GtkStack.html) .
+Our simple ui file puts a [`Gtk::HeaderBar`](https://developer.gnome.org/gtk3/stable/GtkHeaderBar.html) on top of a [`Gtk::Stack`](https://developer.gnome.org/gtk3/stable/GtkStack.html) widget. The header bar contains a [`Gtk::StackSwitcher`](https://developer.gnome.org/gtk3/stable/GtkStackSwitcher.html), which is a standalone widget to show a row of 'tabs' for the pages of a [`Gtk::Stack`](https://developer.gnome.org/gtk3/stable/GtkStack.html) .
 
 Here is the "window.ui" file that contains the template of the window:
 
@@ -368,7 +368,7 @@ Unlike regular interface descriptions, in template XML descriptions, a`<template
 
 More informations can be found in the part [building composite widgets from template XML](https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget.description) of the `Gtk::Widget` documentation. 
 
-* exampleapp2.rb : link a template to a custom class widget.
+#### exampleapp2.rb : link a template to a custom class widget.
 
 ```ruby
 class ExampleAppWindow < Gtk::ApplicationWindow
@@ -388,18 +388,49 @@ class ExampleAppWindow < Gtk::ApplicationWindow
   end
 end
 ```
-* type_register :
-  we register this class as a new GType (glib2/ext/glib2/rbgobj_object.c and https://developer.gnome.org/gobject/stable/chapter-gtype.html).
-  https://blogs.gnome.org/desrt/2012/02/26/a-gentle-introduction-to-gobject-construction/
 
-  # https://github.com/ruby-gnome2/ruby-gnome2/pull/445
-  # https://github.com/ruby-gnome2/ruby-gnome2/issues/503
-  when type register is used, super is equivalent to `GLib::Object#initialize`
+We create a subclass of Gtk::ApplicationWindow. Then we call the method `type_register` inherited from `GLib::Object` in order to register this class as a new [GType](https://developer.gnome.org/gobject/stable/chapter-gtype.html). See the file *ruby-gnome2/glib2/ext/glib2/rbgobj_object.c* for the C implementation. More informations on the gobject manipulation can be found [here](https://blogs.gnome.org/desrt/2012/02/26/a-gentle-introduction-to-gobject-construction/)
 
-*    exampleapp2.rb
+The template of the interface is bound to the class using the `init` singleton method. We just open the *eigenclass*  with `class << self` and define the method `init` in which we call the `Gtk::Widget#set_template` method.
+
+After that, the `ExampleAppWindow#initialize` method must be overwritten. When `type_register` is used, *super* is equivalent to `GLib::Object#initialize` so you need to use properties style constructor (hash argument, see [here](https://github.com/ruby-gnome2/ruby-gnome2/issues/503))
+
+#### exampleapp2.rb : load a resource file.
+
+You may have noticed that we used the `:resource => ` key as the argument of the method that sets a template. Now we need to use GLib's resource functionality to include the ui file in the binary. This is commonly done by listing all resources in a .gresource.xml file, such as this:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gtk/exampleapp">
+    <file preprocess="xml-stripblanks">window.ui</file>
+  </gresource>
+</gresources>
+```
+In our script, we built the resource binary file with
+```ruby
+system("glib-compile-resources",
+       "--target", gresource_bin,
+       "--sourcedir", File.dirname(gresource_xml),
+       gresource_xml)
+```
+Then we make sure that this file is deleted when the script is done :
+
+```ruby
+at_exit do
+  FileUtils.rm_f(gresource_bin)
+end
+```
+The resource binary file is loaded so that each resources in it can be accessed via theirs respective paths.
+
+```ruby
+resource = Gio::Resource.load(gresource_bin)
+Gio::Resources.register(resource)
+```
 
 ### Opening files
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.7
+ The initial implementation have been done in this [pull request](https://github.com/ruby-gnome2/ruby-gnome2/pull/445)
 
 *    exampleapp3.rb
 
