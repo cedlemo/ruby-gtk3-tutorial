@@ -821,7 +821,7 @@ def open(file)
   @settings.bind("font", tag, "font", Gio::SettingsBindFlags::DEFAULT)
   buffer.apply_tag(tag, buffer.start_iter, buffer.end_iter)
 end
-`` 
+``` 
 
 
 
