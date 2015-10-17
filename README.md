@@ -32,6 +32,26 @@ Gtk.main
 ```
 This tutorial will mainly be focused on the use of Gtk::Application, which is the best way to create an application.
 
+## Table of Contents
+*  [Basics](#basics)
+*  [Packing](#packing)
+*  [Building user interfaces](#building-user-interfaces)
+*  [Building Applications](#building-applications)
+  *  [A trivial application](#a trivial application)
+  *  [Populating the window](#populating-the-window)
+    *  [Link a template to a custom class widget](#link-a-template-to-a-custom-class-widget)
+    *  [Load a resource file](#load-a-resource-file)
+  *  [Opening files](#opening-file)
+  *  [An application menu](#an-application-menu)
+    *  [Adding the menu interface](#adding-the-menu-interface)
+    *  [Linking menu items to actions](#linking-menu-items-to-actions)
+    *  [Add accelerators for an action](#add-accelerators-for-an-action)
+  *  [A preference dialog](#a-preference-dialog)
+    *  [Define and store settings for an application with gschemas](#define-and-store-settings-for-an-application-with-gschemas)
+    *  [Configure the settings with a dialog window](#configure-the-settings-with-a-dialog-window)
+  *  [Adding a search bar](#adding-a-search-bar)
+  *  [Adding a sidebar](#adding-a-sidebar)
+
 ## Basics
 https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.5
 
@@ -368,8 +388,9 @@ Unlike regular interface descriptions, in template XML descriptions, a`<template
 
 More informations can be found in the part [building composite widgets from template XML](https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget.description) of the `Gtk::Widget` documentation. 
 
-#### exampleapp2.rb : link a template to a custom class widget.
+#### Link a template to a custom class widget.
 
+exampleapp2.rb : 
 ```ruby
 class ExampleAppWindow < Gtk::ApplicationWindow
   type_register
@@ -395,7 +416,7 @@ The template of the interface is bound to the class using the `init` singleton m
 
 After that, the `ExampleAppWindow#initialize` method must be overwritten. When `type_register` is used, *super* is equivalent to `GLib::Object#initialize` so you need to use properties style constructor (hash argument, see [here](https://github.com/ruby-gnome2/ruby-gnome2/issues/503))
 
-#### exampleapp2.rb : load a resource file.
+#### Load a resource file.
 
 You may have noticed that we used the `:resource => ` key as the argument of the method that sets a template. Now we need to use GLib's resource functionality to include the ui file in the binary. This is commonly done by listing all resources in a .gresource.xml file, such as this:
 
@@ -598,10 +619,10 @@ application.add_action(action)
 application.set_accels_for_action("app.quit", quit_accels)
 ```
 
-### A preferences dialog
+### A preference dialog
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.9
 
-### Define and store settings for an application with gschemas
+#### Define and store settings for an application with gschemas
 *    exampleapp5.rb
 
 A typical application will have a some preferences that should be remembered from one run to the next. Even for our simple example application, we may want to change the font that is used for the content.
@@ -825,7 +846,7 @@ end
 
 
 
-## Adding a search bar
+### Adding a search bar
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.10
 
 *    exampleapp7.rb
@@ -937,7 +958,7 @@ In this part of code, the use of the method `set_connect_func` will allow us to 
 
 Those pieces together mean that the signal *search-changed* of the `Gtk::SearchEntry`, trigger the private method of `ExampleAppWindow` that is called `search_text_changed`.
 
-## Adding a sidebar
+### Adding a sidebar
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.11
 
 *    exampleapp8.rb
