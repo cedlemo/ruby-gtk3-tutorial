@@ -1174,7 +1174,7 @@ We also need a function that counts the lines of the currently active tab, and u
 
 https://developer.gnome.org/gtk3/stable/ch01s04.html#id-1.2.3.12.13
 
-Our application already uses a GtkHeaderBar, but so far it still gets a 'normal' window titlebar on top of that. This is a bit redundant, and we will now tell GTK+ to use the header bar as replacement for the titlebar. To do so, we move it around to be a direct child of the window, and set its type to be titlebar.
+Our application already uses a `Gtk::HeaderBar`, but so far it still gets a 'normal' window titlebar on top of that. This is a bit redundant, and we will now tell GTK+ to use the header bar as replacement for the titlebar. To do so, we move it around to be a direct child of the window, and set its type to be titlebar.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
