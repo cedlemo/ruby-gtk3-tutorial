@@ -52,6 +52,7 @@ This tutorial will mainly be focused on the use of Gtk::Application, which is th
   *  [Adding a search bar](#adding-a-search-bar)
   *  [Adding a sidebar](#adding-a-sidebar)
   *  [Properties](#properties)
+
 ## Basics
 https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.5
 
