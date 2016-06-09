@@ -16,7 +16,7 @@ Here is the most basic example that illustrate the principles of widget hierarch
 require "gtk3"
 
 window = Gtk::Window.new("First example")
-window.set_request_size(400, 400)
+window.set_size_request(400, 400)
 window.set_border_width(10)
 
 button = Gtk::Button.new(:label => "Say hello")
